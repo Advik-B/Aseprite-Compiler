@@ -30,7 +30,7 @@ def generate_fake_headers():
     }
 
 
-def check_internet_connection(timeout: int = 10):
+def check_internet_connection_(timeout: int = 10):
     try:
         get("https://www.google.com/", timeout=timeout)
         return True
@@ -49,6 +49,6 @@ def download(
     check_internet_connection: bool = True,
     ):
     if check_internet_connection:
-        if check_internet_connection():
+        if check_internet_connection_():
             console.log("[ ERROR ]: No internet connection found. ")
             return
