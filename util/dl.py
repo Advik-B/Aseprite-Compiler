@@ -3,10 +3,6 @@ from .prime_numbers import is_prime
 from .o import console
 from rich.console import Console
 
-#TODO: Remove this in production
-console: Console = console # For type hinting in vscode
-
-
 
 def buildblock(size):
     block = str()
