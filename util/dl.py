@@ -1,6 +1,7 @@
 from requests import get
 from .prime_numbers import is_prime
 from .o import console
+from .constants import ERROR
 from rich.console import Console
 
 
@@ -49,6 +50,6 @@ def download(
     check_internet_connection: bool = True,
     ):
     if check_internet_connection:
-        if check_internet_connection_():
-            console.log("[ ERROR ]: No internet connection.")
+        if not check_internet_connection_():
+            console.log(f"{ERROR} No internet connection.")
             return
