@@ -1,6 +1,11 @@
 from requests import get
 from .prime_numbers import is_prime
 from .o import console
+from rich.console import Console
+
+#TODO: Remove this in production
+console: Console = console # For type hinting in vscode
+
 
 
 def buildblock(size):
@@ -45,5 +50,9 @@ def download(
     fallback_filename: str | None = None,
     be_careful: bool = False,
     blend_in: bool = False,
-):
-    pass
+    check_internet_connection: bool = True,
+    ):
+    if check_internet_connection:
+        if not check_internet_connection():
+            console.
+            return
