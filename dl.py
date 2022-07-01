@@ -27,3 +27,7 @@ def generate_fake_headers():
         "User-Agent": get("https://randua.deta.dev").json()["ua"],
     }
 
+def download(
+    url: str,
+    
+): pass
