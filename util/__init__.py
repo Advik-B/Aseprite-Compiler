@@ -1,5 +1,6 @@
 from rich.terminal_theme import TerminalTheme
 from .o import console
+from .dl import download
 
 discord_theme = TerminalTheme(
     (39, 41, 46),
