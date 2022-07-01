@@ -27,6 +27,13 @@ def generate_fake_headers():
         "User-Agent": get("https://randua.deta.dev").json()["ua"],
     }
 
+def check_internet_connection(timeout: int = 10):
+    try:
+        get("https://www.google.com/", timeout=timeout)
+        return True
+    except:
+        return False
+
 def download(
     url: str,
     show_progress: bool = True,
