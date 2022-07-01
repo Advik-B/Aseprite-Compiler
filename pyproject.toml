@@ -1,0 +1,17 @@
+[tool.poetry]
+name = "aseprite-compiler"
+version = "0.1.0"
+description = "Aseprite-Compiler is a simple tool to compile Aseprite on the user's computer."
+authors = ["Advik <advik.b@gmail.com>"]
+license = "(L)GPL"
+
+[tool.poetry.dependencies]
+python = "^3.9"
+requests = "^2.28.1"
+rich = "^12.4.4"
+
+[tool.poetry.dev-dependencies]
+
+[build-system]
+requires = ["poetry-core>=1.0.0"]
+build-backend = "poetry.core.masonry.api"
