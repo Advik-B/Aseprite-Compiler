@@ -1,9 +1,9 @@
-from requests import get
 from .prime_numbers import is_prime
+from ..errors import NoInternetConnection
 from .o import console
 from .constants import ERROR
 from rich.console import Console
-
+from requests import get
 
 def buildblock(size):
     block = str()
