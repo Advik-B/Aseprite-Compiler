@@ -1,9 +1,10 @@
 from .prime_numbers import is_prime
 from ..errors import NoInternetConnection
 from .o import console
-from .constants import ERROR
+from .constants import ERROR, INFO
 from rich.console import Console
 from requests import get
+import json
 
 def buildblock(size):
     block = str()
@@ -48,8 +49,54 @@ def download(
     be_careful: bool = False,
     blend_in: bool = False,
     check_internet_connection: bool = True,
+    allow_redirects: bool = True,
+    show_locals: bool = False,
     ):
     if check_internet_connection:
         if not check_internet_connection_():
             console.log(f"{ERROR} No internet connection.")
-            return
+            return NoInternetConnection("Module: %s" % __name__)
+    
+    headers = {}
+    validate_ssl = False
+    if blend_in:
+        headers = generate_fake_headers()
+    if be_careful:
+        validate_ssl = True
+    
+    response = get(url, headers=headers, verify=validate_ssl, allow_redirects=allow_redirects)
+
+    if show_headers:
+        console.log(INFO, " Headers: ")
+        console.print_json(json.dumps(response.headers), indent=4)
+    
+    if show_extra_info:
+        console.log(INFO, " Extra info: ")
+        console.print_json(
+            json.dumps(
+                {
+                    "url": response.url,
+                    "reason": response.reason,
+                    "status_code": response.status_code,
+                    "encoding": response.encoding,
+                    "content_type": response.headers.get("content-type"),
+                    "history": response.history,
+                        
+                },
+                indent=4,
+                ensure_ascii=False)
+            )
+    
+    # Get the filename from the response headers if possible.
+    filename = fallback_filename
+    if fallback_filename is None:
+        try:
+            filename = response.headers.get("content-disposition").split("filename=")[1]
+        except IndexError:
+            pass
+    
+    if filename is None:
+        filename = url.split("/")[-1]
+    
+    if show_locals:
+        console.log(log_locals=True)
