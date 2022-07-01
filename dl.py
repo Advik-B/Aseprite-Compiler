@@ -29,5 +29,10 @@ def generate_fake_headers():
 
 def download(
     url: str,
-    
+    show_progress: bool = True,
+    show_headers: bool = False,
+    show_extra_info: bool = False,
+    fallback_filename: str | None = None,
+    be_careful: bool = False,
+    blend_in: bool = False,
 ): pass
