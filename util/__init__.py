@@ -27,5 +27,4 @@ discord_theme = TerminalTheme(
         (0, 255, 255),
         (255, 255, 255),
     ],
-    )
-
+)

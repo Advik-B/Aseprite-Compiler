@@ -15,10 +15,10 @@ def find_executable_in_path(executable, multiple=False):
     for directory in path.split(os.pathsep):
         if os.path.exists(os.path.join(directory, executable)):
             executables.append(os.path.join(directory, executable))
-    
+
     if len(executables) == 0:
         return None
-    
+
     if multiple:
         return tuple(executables)
     else:

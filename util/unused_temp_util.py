@@ -1,6 +1,7 @@
 import sys
 import termcolor
 
+
 def buildblock(size):
     block = str()
     for _ in range(size):
@@ -25,7 +26,6 @@ def generate_fake_headers():
         "Connection": "keep-alive",
         "User-Agent": get("https://randua.deta.dev").json()["ua"],
     }
-
 
 
 LF = "\n"
