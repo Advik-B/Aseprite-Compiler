@@ -1,5 +1,5 @@
 from requests import get
-
+from .prime_numbers import is_prime
 
 def buildblock(size):
     block = str()
