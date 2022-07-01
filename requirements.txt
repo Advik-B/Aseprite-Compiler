@@ -1,0 +1,5 @@
+requests
+termcolor
+colorama
+alive_progress
+supports-color
