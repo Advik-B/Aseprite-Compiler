@@ -50,5 +50,5 @@ def download(
     ):
     if check_internet_connection:
         if check_internet_connection_():
-            console.log("[ ERROR ]: No internet connection. ")
+            console.log("[ ERROR ]: No internet connection.")
             return
