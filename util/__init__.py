@@ -1,8 +1,6 @@
 from .prime_numbers import is_prime
-from rich.console import Console
 from rich.terminal_theme import TerminalTheme
-
-console = Console(record=True)
+from .o import console
 
 discord_theme = TerminalTheme(
     (39, 41, 46),
