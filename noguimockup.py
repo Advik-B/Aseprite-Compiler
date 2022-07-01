@@ -1,10 +1,5 @@
 import os
 import platform
-from util import cout
-from util.dl import download_file
-import colorama
-
-# colorama.init()
 
 OS = platform.system().casefold()
 
@@ -36,5 +31,3 @@ def download_git(path):
     """
     if find_executable_in_path("git") is None:
         print("Git is not installed. Temporarily installing git...")
-
-# download_file("https://github.com/Advik-B/CMPDL/releases/download/v1.5.0/CMPDL.cli.zip", show_status=True, show_warnings=True)
