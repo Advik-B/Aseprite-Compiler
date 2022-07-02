@@ -56,7 +56,7 @@ def download(
     fallback_filename: str | None = None,
     be_careful: bool = False,
     blend_in: bool = False,
-    check_internet_connection: bool = True,
+    check_internet_connection: bool = False,
     allow_redirects: bool = True,
     show_locals: bool = False,
 ):
