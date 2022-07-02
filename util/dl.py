@@ -1,20 +1,12 @@
 from .constants import ERROR, INFO, WARNING, DEBUG
 from .prime_numbers import is_prime
 from .o import console
+from ._dl import iter_content
 import json
 import warnings
 from requests import get
 from urllib3.exceptions import InsecureRequestWarning
-from rich.progress import (
-    BarColumn,
-    DownloadColumn,
-    Progress,
-    TaskID,
-    TextColumn,
-    TimeRemainingColumn,
-    TransferSpeedColumn,
-)
-
+from alive_progress import alive_bar
 # from ..errors import NoInternetConnection
 
 
@@ -23,20 +15,6 @@ class NoInternetConnection(Exception):
 
 
 warnings.filterwarnings("ignore", category=InsecureRequestWarning)
-
-progress = Progress(
-    TextColumn("[bold blue]{task.fields[filename]}", justify="right"),
-    BarColumn(bar_width=None),
-    "[progress.percentage]{task.percentage:>3.1f}%",
-    "•",
-    DownloadColumn(),
-    "•",
-    TransferSpeedColumn(),
-    "•",
-    TimeRemainingColumn(),
-    console=console,
-    transient=True,
-)
 
 
 def buildblock(size):
@@ -107,7 +85,7 @@ def download(
 
     if show_headers:
         console.log(INFO, " Headers: ")
-        console.print_json(json.dumps(response.headers), indent=4)
+        console.print_json(json.dumps(dict(response.headers)), indent=4)
 
     if show_extra_info:
         console.log(INFO, " Extra info: ")
@@ -118,7 +96,7 @@ def download(
                 "status_code": response.status_code,
                 "encoding": response.encoding,
                 "content_type": response.headers.get("content-type"),
-                "history": response.history,
+                # "history": response.history,
             },
         )
 
@@ -158,24 +136,18 @@ def download(
     if file_size % chunk_size != 0:
         chunk_size = file_size % chunk_size
 
+    # file_size = file_size / chunk_size
     if chunk_dl:
         if show_progress:
-            task_id = progress.add_task(
-                filename,
-                total=file_size,
-                visible=True,
-            )
             with open(filename, "wb") as f:
-                for data in response.iter_content(chunk_size=chunk_size):
-                    f.write(data)
-                    progress.update(task_id=task_id, increment=len(data),
-                                    data=data, total=file_size)
+                iter_content(f, file_size, response)
         else:
             with open(filename, "wb") as f:
                 for data in response.iter_content(chunk_size=chunk_size):
                     f.write(data)
     else:
         with open(filename, "wb") as f:
-            f.write(response.content)
+            for data in response.iter_content(chunk_size=chunk_size):
+                f.write(data)
 
     console.log(INFO, f"Downloaded {filename}")
