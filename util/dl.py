@@ -1,3 +1,6 @@
+from .constants import ERROR, INFO, WARNING
+from .prime_numbers import is_prime
+from .o import console
 import json
 import warnings
 from requests import get
@@ -13,10 +16,11 @@ from rich.progress import (
 )
 
 # from ..errors import NoInternetConnection
-class NoInternetConnection(Exception): pass
-from .constants import ERROR, INFO, WARNING
-from .o import console
-from .prime_numbers import is_prime
+
+
+class NoInternetConnection(Exception):
+    pass
+
 
 warnings.filterwarnings("ignore", category=InsecureRequestWarning)
 
@@ -81,6 +85,10 @@ def download(
     allow_redirects: bool = True,
     show_locals: bool = False,
 ):
+    # Clear the trailing slash if it exists
+    if url[-1] == "/":
+        url = url[:-1]
+
     if check_internet_connection:
         if not check_internet_connection_():
             console.log(f"{ERROR} No internet connection.")
@@ -119,7 +127,7 @@ def download(
     if fallback_filename is None:
         try:
             filename = response.headers.get(
-             "content-disposition").split("filename=")[1]
+                "content-disposition").split("filename=")[1]
         except IndexError:
             pass
         except AttributeError:
@@ -127,12 +135,13 @@ def download(
 
     if filename is None:
         filename = url.split("/")[-1]
+        console.log(WARNING, f"No filename found. Using {filename}.")
 
     if show_locals:
         console.log(log_locals=True)
 
     file_size = int(response.headers.get("content-length", 0))
-    if file_size < 1024:
+    if file_size < 1024 and file_size > 0:
         console.log(WARNING, f"File size: {file_size} bytes (less than 1MB)")
 
     chunk_dl = True
@@ -147,10 +156,17 @@ def download(
     if file_size % chunk_size != 0:
         chunk_size = file_size % chunk_size
 
-
     if chunk_dl:
         if show_progress:
             with open(filename, "wb") as f:
                 for data in response.iter_content(chunk_size=chunk_size):
                     f.write(data)
-                    progress.update(task_id=TaskID(filename), data=data, total=file_size)
+                    progress.update(task_id=TaskID(filename),
+                                    data=data, total=file_size)
+        else:
+            with open(filename, "wb") as f:
+                for data in response.iter_content(chunk_size=chunk_size):
+                    f.write(data)
+    else:
+        with open(filename, "wb") as f:
+            f.write(response.content)
