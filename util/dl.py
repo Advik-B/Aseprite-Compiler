@@ -1,4 +1,4 @@
-from .constants import ERROR, INFO, WARNING
+from .constants import ERROR, INFO, WARNING, DEBUG
 from .prime_numbers import is_prime
 from .o import console
 import json
@@ -102,7 +102,7 @@ def download(
         validate_ssl = True
 
     response = get(
-        url, headers=headers, verify=validate_ssl, allow_redirects=allow_redirects
+        url, headers=headers, verify=validate_ssl, allow_redirects=allow_redirects, stream=True
     )
 
     if show_headers:
@@ -140,12 +140,14 @@ def download(
     if show_locals:
         console.log(log_locals=True)
 
-    file_size = int(response.headers.get("content-length", 0))
+    file_size = response.headers.get("content-length")
+    console.log(DEBUG, 'Starting file-size: %s' % file_size)
+    file_size = int(file_size)
     if file_size < 1024 and file_size > 0:
         console.log(WARNING, f"File size: {file_size} bytes (less than 1MB)")
 
     chunk_dl = True
-    if file_size >= 0:
+    if file_size <= 0:
         console.log(
             WARNING, f"File size is not known. Chunk downloading is not possible."
         )
@@ -158,10 +160,15 @@ def download(
 
     if chunk_dl:
         if show_progress:
+            task_id = progress.add_task(
+                filename,
+                total=file_size,
+                visible=True,
+            )
             with open(filename, "wb") as f:
                 for data in response.iter_content(chunk_size=chunk_size):
                     f.write(data)
-                    progress.update(task_id=TaskID(filename),
+                    progress.update(task_id=task_id, increment=len(data),
                                     data=data, total=file_size)
         else:
             with open(filename, "wb") as f:
@@ -170,3 +177,5 @@ def download(
     else:
         with open(filename, "wb") as f:
             f.write(response.content)
+
+    console.log(INFO, f"Downloaded {filename}")
