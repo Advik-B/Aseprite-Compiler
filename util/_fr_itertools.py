@@ -1,7 +1,6 @@
 from alive_progress import alive_bar
 from io import BytesIO
 from requests import Response
-from functools import partial
 
 def iter_content(file: BytesIO, conten_length:int,r: Response, chunk_size=1024):
     """Iterates over the response data in chunks of bytes."""
