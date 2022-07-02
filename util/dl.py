@@ -1,18 +1,15 @@
-from .constants import ERROR, INFO, WARNING, DEBUG
-from .prime_numbers import is_prime
-from .o import console
-from ._fr_itertools import iter_content
 import json
 import warnings
+
+from alive_progress import alive_bar
 from requests import get
 from urllib3.exceptions import InsecureRequestWarning
-from alive_progress import alive_bar
-# from ..errors import NoInternetConnection
 
-
-class NoInternetConnection(Exception):
-    pass
-
+from ._fr_itertools import iter_content
+from .constants import DEBUG, ERROR, INFO, WARNING
+from .errors import NoInternetConnection
+from .o import console
+from .prime_numbers import is_prime
 
 warnings.filterwarnings("ignore", category=InsecureRequestWarning)
 
