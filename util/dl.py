@@ -1,7 +1,7 @@
 from .constants import ERROR, INFO, WARNING, DEBUG
 from .prime_numbers import is_prime
 from .o import console
-from ._dl import iter_content
+from ._fr_itertools import iter_content
 import json
 import warnings
 from requests import get
