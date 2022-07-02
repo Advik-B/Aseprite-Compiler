@@ -1,7 +1,12 @@
 from rich.terminal_theme import TerminalTheme
 from .o import console
 from .dl import download
-from .constants import ERROR, DEBUG, WARNING, INFO # I am explicitly importing these constants because it helps with type hints and Tests.
+from .constants import (
+    ERROR,
+    DEBUG,
+    WARNING,
+    INFO,
+)  # I am explicitly importing these constants because it helps with type hints and Tests.
 
 discord_theme = TerminalTheme(
     (39, 41, 46),

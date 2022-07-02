@@ -67,8 +67,9 @@ def download(
     if be_careful:
         validate_ssl = True
 
-    response = get(url, headers=headers, verify=validate_ssl,
-                   allow_redirects=allow_redirects)
+    response = get(
+        url, headers=headers, verify=validate_ssl, allow_redirects=allow_redirects
+    )
 
     if show_headers:
         console.log(INFO, " Headers: ")
@@ -85,18 +86,17 @@ def download(
                     "encoding": response.encoding,
                     "content_type": response.headers.get("content-type"),
                     "history": response.history,
-
                 },
                 indent=4,
-                ensure_ascii=False)
+                ensure_ascii=False,
+            )
         )
 
     # Get the filename from the response headers if possible.
     filename = fallback_filename
     if fallback_filename is None:
         try:
-            filename = response.headers.get(
-                "content-disposition").split("filename=")[1]
+            filename = response.headers.get("content-disposition").split("filename=")[1]
         except IndexError:
             pass
 
@@ -113,5 +113,6 @@ def download(
     chunk_dl = True
     if file_size >= 0:
         console.log(
-            WARNING, f"File size is not known. Chunk downloading is not possible.")
+            WARNING, f"File size is not known. Chunk downloading is not possible."
+        )
         chunk_dl = False
