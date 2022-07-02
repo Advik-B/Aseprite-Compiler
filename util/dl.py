@@ -149,5 +149,6 @@ def download(
         with open(filename, "wb") as f:
             for data in response.iter_content(chunk_size=chunk_size):
                 f.write(data)
-
+    if show_locals:
+        console.log(log_locals=True)
     console.log(INFO, f"Downloaded {filename}")
