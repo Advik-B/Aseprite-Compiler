@@ -1,12 +1,38 @@
 import json
-
+import warnings
 from requests import get
-from rich.console import Console
+from urllib3.exceptions import InsecureRequestWarning
+from rich.progress import (
+    BarColumn,
+    DownloadColumn,
+    Progress,
+    TaskID,
+    TextColumn,
+    TimeRemainingColumn,
+    TransferSpeedColumn,
+)
 
-from ..errors import NoInternetConnection
+# from ..errors import NoInternetConnection
+class NoInternetConnection(Exception): pass
 from .constants import ERROR, INFO, WARNING
 from .o import console
 from .prime_numbers import is_prime
+
+warnings.filterwarnings("ignore", category=InsecureRequestWarning)
+
+progress = Progress(
+    TextColumn("[bold blue]{task.fields[filename]}", justify="right"),
+    BarColumn(bar_width=None),
+    "[progress.percentage]{task.percentage:>3.1f}%",
+    "•",
+    DownloadColumn(),
+    "•",
+    TransferSpeedColumn(),
+    "•",
+    TimeRemainingColumn(),
+    console=console,
+    transient=True,
+)
 
 
 def buildblock(size):
@@ -78,26 +104,25 @@ def download(
     if show_extra_info:
         console.log(INFO, " Extra info: ")
         console.print_json(
-            json.dumps(
-                {
-                    "url": response.url,
-                    "reason": response.reason,
-                    "status_code": response.status_code,
-                    "encoding": response.encoding,
-                    "content_type": response.headers.get("content-type"),
-                    "history": response.history,
-                },
-                indent=4,
-                ensure_ascii=False,
-            )
+            data={
+                "url": response.url,
+                "reason": response.reason,
+                "status_code": response.status_code,
+                "encoding": response.encoding,
+                "content_type": response.headers.get("content-type"),
+                "history": response.history,
+            },
         )
 
     # Get the filename from the response headers if possible.
     filename = fallback_filename
     if fallback_filename is None:
         try:
-            filename = response.headers.get("content-disposition").split("filename=")[1]
+            filename = response.headers.get(
+             "content-disposition").split("filename=")[1]
         except IndexError:
+            pass
+        except AttributeError:
             pass
 
     if filename is None:
@@ -116,3 +141,16 @@ def download(
             WARNING, f"File size is not known. Chunk downloading is not possible."
         )
         chunk_dl = False
+
+    chunk_size = 1024
+    # Check if the file-size not divisible by chunk-size.
+    if file_size % chunk_size != 0:
+        chunk_size = file_size % chunk_size
+
+
+    if chunk_dl:
+        if show_progress:
+            with open(filename, "wb") as f:
+                for data in response.iter_content(chunk_size=chunk_size):
+                    f.write(data)
+                    progress.update(task_id=TaskID(filename), data=data, total=file_size)
