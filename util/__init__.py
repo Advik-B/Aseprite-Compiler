@@ -1,5 +1,9 @@
-from rich.terminal_theme import TerminalTheme
+# Install the rich traceback first before anything else.
+from rich.traceback import install
 from .o import console
+install(extra_lines=5, show_locals=True, console=console)
+
+from rich.terminal_theme import TerminalTheme
 from .dl import download
 from .constants import (
     ERROR,
