@@ -117,7 +117,7 @@ def download(
         console.log(log_locals=True)
 
     file_size = response.headers.get("content-length")
-    console.log(DEBUG, 'Starting file-size: %s' % file_size)
+    # console.log(DEBUG, 'Starting file-size: %s' % file_size)
     file_size = int(file_size)
     if file_size < 1024 and file_size > 0:
         console.log(WARNING, f"File size: {file_size} bytes (less than 1MB)")
@@ -149,4 +149,3 @@ def download(
                 f.write(data)
     if show_locals:
         console.log(log_locals=True)
-    console.log(INFO, f"Downloaded {filename}")
