@@ -59,6 +59,7 @@ def download(
     check_internet_connection: bool = False,
     allow_redirects: bool = True,
     show_locals: bool = False,
+    progressbar: str = "alive",
 ):
     # Clear the trailing slash if it exists
     if url[-1] == "/":
