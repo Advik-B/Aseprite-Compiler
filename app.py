@@ -7,7 +7,6 @@ from util import (
     errors,
 )
 from rich.tree import Tree
-
 startup_message = (
 
 "[bold green]Welcome[/] to [bold purple][link=https://github.com/Advik-B/Aseprite-Compiler]Aseprite-Compiler[/][/].\n"
@@ -32,3 +31,13 @@ console.print(
     workflow,
     highlight=True,
 )
+
+console.save_html('README2.md')
+
+# import os
+
+# from rich import print
+# from rich.columns import Columns
+
+# directory = os.listdir()
+# console.print(Columns(directory, padding=1))
