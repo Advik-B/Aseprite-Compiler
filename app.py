@@ -32,5 +32,3 @@ console.print(
     workflow,
     highlight=True,
 )
-
-raise errors.NoInternetConnection("No Internet Connection")
