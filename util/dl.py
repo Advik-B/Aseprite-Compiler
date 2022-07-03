@@ -138,7 +138,7 @@ def download(
     if chunk_dl:
         if show_progress:
             with open(filename, "wb") as f:
-                iter_content(f, file_size, response)
+                iter_content(f, file_size, response, progressbar=progressbar)
         else:
             with open(filename, "wb") as f:
                 for data in response.iter_content(chunk_size=chunk_size):
