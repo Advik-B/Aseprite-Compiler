@@ -1,7 +1,7 @@
 from alive_progress import alive_bar
 from io import BytesIO
 from requests import Response
-from rich.progress import track
+from rich.progress import Progress
 from .errors import InvalidProgressBar
 
 def iter_content(file: BytesIO, conten_length: int, r: Response, chunk_size=1024, progressbar:str='alive'):
@@ -15,8 +15,14 @@ def iter_content(file: BytesIO, conten_length: int, r: Response, chunk_size=1024
                 file.write(data)
                 bar()
     elif progressbar.casefold() == 'rich':
-        for _ in track(range(conten_length // chunk_size)):
+        with Progress() as progress:
+            download_task = progress.add_task(
+                description='',
+                total=conten_length // chunk_size,
+            )
             for data in r.iter_content(chunk_size=chunk_size):
                 file.write(data)
+                progress.update(download_task, advance=1)
+
     else:
         raise InvalidProgressBar(f"Invalid progressbar: {progressbar}")
