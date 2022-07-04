@@ -44,7 +44,7 @@ def check_internet_connection_(timeout: int = 10):
     try:
         get("https://www.google.com/", timeout=timeout)
         return True
-    except:
+    except BaseException:
         return False
 
 
@@ -65,20 +65,18 @@ def download(
     if url[-1] == "/":
         url = url[:-1]
 
-    if check_internet_connection:
-        if not check_internet_connection_():
-            console.log(f"{ERROR} No internet connection.")
-            return NoInternetConnection("Module: %s" % __name__)
+    if check_internet_connection and not check_internet_connection_():
+        console.log(f"{ERROR} No internet connection.")
+        return NoInternetConnection(f"Module: {__name__}")
 
-    headers = {}
-    validate_ssl = False
-    if blend_in:
-        headers = generate_fake_headers()
-    if be_careful:
-        validate_ssl = True
-
+    headers = generate_fake_headers() if blend_in else {}
+    validate_ssl = be_careful
     response = get(
-        url, headers=headers, verify=validate_ssl, allow_redirects=allow_redirects, stream=True
+        url,
+        headers=headers,
+        verify=validate_ssl,
+        allow_redirects=allow_redirects,
+        stream=True,
     )
 
     if show_headers:
@@ -100,15 +98,12 @@ def download(
 
     # Get the filename from the response headers if possible.
     filename = fallback_filename
-    if fallback_filename is None:
+    if filename is None:
         try:
             filename = response.headers.get(
                 "content-disposition").split("filename=")[1]
-        except IndexError:
+        except (IndexError, AttributeError):
             pass
-        except AttributeError:
-            pass
-
     if filename is None:
         filename = url.split("/")[-1]
         console.log(WARNING, f"No filename found. Using {filename}.")
@@ -125,8 +120,10 @@ def download(
     chunk_dl = True
     if file_size <= 0:
         console.log(
-            WARNING, f"File size is not known. Chunk downloading is not possible."
+            WARNING,
+            "File size is not known. Chunk downloading is not possible.",
         )
+
         chunk_dl = False
 
     chunk_size = 1024
@@ -134,17 +131,10 @@ def download(
     if file_size % chunk_size != 0:
         chunk_size = file_size % chunk_size
 
-    # file_size = file_size / chunk_size
-    if chunk_dl:
-        if show_progress:
-            with open(filename, "wb") as f:
-                iter_content(f, file_size, response, progressbar=progressbar)
+    with open(filename, "wb") as f:
+        if chunk_dl and show_progress:
+            iter_content(f, file_size, response, progressbar=progressbar)
         else:
-            with open(filename, "wb") as f:
-                for data in response.iter_content(chunk_size=chunk_size):
-                    f.write(data)
-    else:
-        with open(filename, "wb") as f:
             for data in response.iter_content(chunk_size=chunk_size):
                 f.write(data)
     if show_locals:

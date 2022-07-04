@@ -64,12 +64,16 @@ def download(urls: Iterable[str], dest_dir: str):
             for url in urls:
                 filename = url.split("/")[-1]
                 dest_path = os.path.join(dest_dir, filename)
-                task_id = progress.add_task("download", filename=filename, start=False)
+                task_id = progress.add_task(
+                    "download", filename=filename, start=False)
                 pool.submit(copy_url, task_id, url, dest_path)
 
 
 if __name__ == "__main__":
-    # Try with ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━ 0.0% • 0/100 bytes • ? • -:--:--i ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━ 0.0% • 0/100 bytes • ? • -:--:--
+    # Try with ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━ 0.0% • 0/100
+    # bytes • ? • -:--:--i
+    # ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+    # 0.0% • 0/100 bytes • ? • -:--:--
 
     if sys.argv[1:]:
         download(sys.argv[1:], "./")

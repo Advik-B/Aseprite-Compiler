@@ -49,6 +49,12 @@ def cout(
         color (str, optional): _description_. Defaults to "white".
     """
     for t in text:
-        sys.stdout.write(termcolor.colored(str(t), color, "on_" + on_color, styles))
+        sys.stdout.write(
+            termcolor.colored(
+                str(t),
+                color,
+                "on_" +
+                on_color,
+                styles))
     sys.stdout.write(end)
     sys.stdout.flush()
