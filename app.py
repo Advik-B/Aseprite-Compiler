@@ -12,7 +12,7 @@ from rich.panel import Panel
 from prompt_toolkit import prompt
 from prompt_toolkit.history import FileHistory
 from prompt_toolkit.auto_suggest import AutoSuggestFromHistory
-from prompt_toolkit.contrib.completers import WordCompleter
+from prompt_toolkit.completion import WordCompleter
 
 custom_style = Theme(
     {"br": "white", "dep": "italic bold"},
