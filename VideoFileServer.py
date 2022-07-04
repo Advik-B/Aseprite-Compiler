@@ -17,8 +17,8 @@ for fname in os.listdir(dirname):
 # Add some online videos too, for fun
 videos["bbb.mp4 (online)"] = "http://www.w3schools.com/tags/mov_bbb.mp4"
 videos["ice-age.mp4 (online)"] = (
-    "https://dl.dropboxusercontent.com/u/1463853/" "ice%20age%204%20trailer.mp4"
-)
+    "https://dl.dropboxusercontent.com/u/1463853/"
+    "ice%20age%204%20trailer.mp4")
 
 # Make use of Tornado's static file handler
 tornado_app = flx.create_server().app
