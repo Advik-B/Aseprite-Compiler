@@ -100,7 +100,8 @@ def download(
     filename = fallback_filename
     if filename is None:
         try:
-            filename = response.headers.get("content-disposition").split("filename=")[1]
+            filename = response.headers.get(
+                "content-disposition").split("filename=")[1]
         except (IndexError, AttributeError):
             pass
     if filename is None:
