@@ -1,2 +1,8 @@
-from .NoInternetConnection import NoInternetConnection
-from .InvalidProgressBar import InvalidProgressBar
+class CustomError(Exception):
+    pass
+
+class NoInternetConnection(CustomError):
+    pass
+
+class InvalidProgressBar(CustomError):
+    pass
