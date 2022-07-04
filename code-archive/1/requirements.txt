@@ -1,0 +1,6 @@
+requests
+alive_progress
+supports-color
+rich
+prompt_toolkit
+fuzzyfinder
