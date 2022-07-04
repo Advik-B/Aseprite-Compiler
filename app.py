@@ -19,7 +19,6 @@ console.push_theme(custom_style)
 startup_message = (
     "[bold green]Welcome[/] to [bold purple][link=https://github.com/Advik-B/Aseprite-Compiler]Aseprite-Compiler[/][/].\n"
     "[bold purple]Aseprite-Compiler[/] is a CLI tool for compiling [bold blue link=https://www.aseprite.org]Aseprite[/] from its [italic cyan link=https://github.com/Aseprite/Aseprite]source code.[/]\n"
-    "[italic bold green]Some technical details:[/]\n"
 )
 
 deps = Panel(
