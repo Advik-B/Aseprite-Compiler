@@ -9,12 +9,6 @@ from util import (
 from rich.tree import Tree
 from rich.theme import Theme
 from rich.panel import Panel
-from prompt_toolkit import prompt
-from prompt_toolkit.history import FileHistory
-from prompt_toolkit.auto_suggest import AutoSuggestFromHistory
-from prompt_toolkit.completion import WordCompleter
-from prompt_toolkit.completion import Completer, Completion
-from fuzzyfinder import fuzzyfinder
 
 custom_style = Theme(
     {"br": "white", "dep": "italic bold"},
@@ -53,17 +47,6 @@ console.print(
 )
 
 console.print("[italic]Anyways[/], let's start with some basic questions.")
-
-hist = FileHistory('history.txt')
-
-words = ("interactive", "non-interactive")
-
-class WordCompleter(Completer):
-    def get_completions(self, document, complete_event):
-        word_before_cursor = document.get_word_before_cursor(WORD=True)
-        matches = fuzzyfinder(word_before_cursor, words)
-        for m in matches:
-            yield Completion(m, start_position=-len(word_before_cursor))
 
 console.print('What kind of session do you want (interactive/non-interactive)')
 ans = prompt(
