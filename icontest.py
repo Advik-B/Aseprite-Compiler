@@ -82,8 +82,7 @@ class Widget(QWidget):
 
         layout = QGridLayout()
 
-        count = 0
-        for i in icons:
+        for count, i in enumerate(icons):
             select_button = QPushButton(i)
             select_button.setIcon(
                 self.style().standardIcon(
@@ -91,8 +90,6 @@ class Widget(QWidget):
                         QStyle, i)))
 
             layout.addWidget(select_button, count / Col_size, count % Col_size)
-            count += 1
-
         self.setLayout(layout)
 
 
