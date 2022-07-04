@@ -67,7 +67,7 @@ def download(
 
     if check_internet_connection and not check_internet_connection_():
         console.log(f"{ERROR} No internet connection.")
-        return NoInternetConnection(f"Module: {__name__}")
+        raise NoInternetConnection(f"Module: {__name__}")
 
     headers = generate_fake_headers() if blend_in else {}
     validate_ssl = be_careful
