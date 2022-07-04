@@ -44,7 +44,7 @@ def check_internet_connection_(timeout: int = 10):
     try:
         get("https://www.google.com/", timeout=timeout)
         return True
-    except:
+    except BaseException:
         return False
 
 
