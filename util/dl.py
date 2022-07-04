@@ -78,7 +78,11 @@ def download(
         validate_ssl = True
 
     response = get(
-        url, headers=headers, verify=validate_ssl, allow_redirects=allow_redirects, stream=True
+        url,
+        headers=headers,
+        verify=validate_ssl,
+        allow_redirects=allow_redirects,
+        stream=True,
     )
 
     if show_headers:
@@ -102,8 +106,7 @@ def download(
     filename = fallback_filename
     if fallback_filename is None:
         try:
-            filename = response.headers.get(
-                "content-disposition").split("filename=")[1]
+            filename = response.headers.get("content-disposition").split("filename=")[1]
         except IndexError:
             pass
         except AttributeError:
