@@ -65,8 +65,9 @@ class WordCompleter(Completer):
         for m in matches:
             yield Completion(m, start_position=-len(word_before_cursor))
 
+console.print('What kind of session do you want (interactive/non-interactive)')
 ans = prompt(
-    'What kind of session do you want (interactive/non-interactive)',
+    'You>',
     auto_suggest=AutoSuggestFromHistory(),
     completer=WordCompleter(),
 )
