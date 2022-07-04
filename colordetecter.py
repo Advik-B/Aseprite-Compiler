@@ -11,9 +11,10 @@ for line in colors:
     if len(finding) > 0:
         colors_.append(re.findall(RGB_REGEX, line)[-1])
 
-colors = []
-for color in colors_:
-    colors.append({"r": int(color[0]), "g": int(color[1]), "b": int(color[2])})
+colors = [
+    {"r": int(color[0]), "g": int(color[1]), "b": int(color[2])}
+    for color in colors_
+]
 
 for color in colors:
     print(color)

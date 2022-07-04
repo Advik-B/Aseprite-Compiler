@@ -9,10 +9,11 @@ from tornado.web import StaticFileHandler
 dirname = r"E:\Videos"
 
 # Collect videos that look like they can be read in html5
-videos = {}
-for fname in os.listdir(dirname):
-    if fname.endswith(".mp4"):
-        videos[fname] = "/videos/" + fname
+videos = {
+    fname: f"/videos/{fname}"
+    for fname in os.listdir(dirname)
+    if fname.endswith(".mp4")
+}
 
 # Add some online videos too, for fun
 videos["bbb.mp4 (online)"] = "http://www.w3schools.com/tags/mov_bbb.mp4"
