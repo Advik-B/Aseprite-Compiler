@@ -1,5 +1,6 @@
 import json
 import warnings
+from typing import Union
 
 from alive_progress import alive_bar
 from requests import get
@@ -53,7 +54,7 @@ def download(
     show_progress: bool = True,
     show_headers: bool = False,
     show_extra_info: bool = False,
-    fallback_filename: str | None = None,
+    fallback_filename: Union[str, None] = None,
     be_careful: bool = False,
     blend_in: bool = False,
     check_internet_connection: bool = False,
