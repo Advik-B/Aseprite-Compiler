@@ -30,8 +30,7 @@ deps = Panel(
     "6. [italic bold magenta link=https://visualstudio.microsoft.com/downloads/]Visual Studio Build Tools[/] [bold white](Compiler)[/]\n"
     "7. [italic bold Yellow link=https://developer.microsoft.com/en-us/windows/downloads/windows-sdk/]Windows SDK[/] [bold white](Software Development Kit)[/]\n",
     title="There are the dependencies that Aseprite-Compiler needs.",
-    highlight=True,
-)
+    highlight=True,)
 
 steps = Panel(
     "1. Check if any of the dependencies are missing on your system. [italic green][br]([/]Usally [cyan]fast[/][br])[/][/]\n"
@@ -39,8 +38,7 @@ steps = Panel(
     "3. Temporarily install the dependencies. [italic yellow][br]([/]This will take [italic white]some[/] time[br])[/][/]\n"
     "4. Compile Aseprite. [italic yellow][br]([/]This will take [bold white]A LOT[/] of time[br])[/][/]\n",
     highlight=True,
-    title="There are the details on how [bold purple]Aseprite-Compiler[/] works.",
-)
+    title="There are the details on how [bold purple]Aseprite-Compiler[/] works.",)
 console.print(
     startup_message,
     deps,
