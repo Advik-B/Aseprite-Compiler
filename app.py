@@ -9,6 +9,7 @@ from util import (
 from rich.tree import Tree
 from rich.theme import Theme
 from rich.panel import Panel
+from rich.table import Table
 
 custom_style = Theme(
     {"br": "white", "dep": "italic bold"},
@@ -49,8 +50,10 @@ console.print(
 console.print("[italic]Anyways[/], let's start with some basic questions.")
 
 console.print('What kind of session do you want (interactive/non-interactive)')
-ans = prompt(
-    'You>',
-    auto_suggest=AutoSuggestFromHistory(),
-    completer=WordCompleter(),
-)
+options = Table(title="")
+options.add_column("Options", style="bold")
+options.add_column("Value", style="bold")
+options.add_row("Interactive", "1")
+options.add_row("Non-Interactive", "No")
+console.print(options)
+console.print("[italic]Please select a number[/]", end="")
