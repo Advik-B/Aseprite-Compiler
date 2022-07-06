@@ -84,10 +84,7 @@ class Widget(QWidget):
 
         for count, i in enumerate(icons):
             select_button = QPushButton(i)
-            select_button.setIcon(
-                self.style().standardIcon(
-                    getattr(
-                        QStyle, i)))
+            select_button.setIcon(self.style().standardIcon(getattr(QStyle, i)))
 
             layout.addWidget(select_button, count / Col_size, count % Col_size)
         self.setLayout(layout)
