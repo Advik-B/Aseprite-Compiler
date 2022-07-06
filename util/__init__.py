@@ -37,7 +37,6 @@ def find_executable_in_path(executable, multiple=False):
         return executables[0]
 
 
-
 discord_theme = TerminalTheme(
     (39, 41, 46),
     (255, 255, 255),
