@@ -64,8 +64,7 @@ def download(urls: Iterable[str], dest_dir: str):
             for url in urls:
                 filename = url.split("/")[-1]
                 dest_path = os.path.join(dest_dir, filename)
-                task_id = progress.add_task(
-                    "download", filename=filename, start=False)
+                task_id = progress.add_task("download", filename=filename, start=False)
                 pool.submit(copy_url, task_id, url, dest_path)
 
 

@@ -1,7 +1,12 @@
 # Install the rich traceback first before anything else.
 # I am explicitly importing these constants because it helps with type
 # hints and Tests.
-from .constants import (ERROR, DEBUG, WARNING, INFO, )
+from .constants import (
+    ERROR,
+    DEBUG,
+    WARNING,
+    INFO,
+)
 from .dl import download
 from rich.terminal_theme import TerminalTheme
 from rich.traceback import install
