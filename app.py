@@ -94,7 +94,6 @@ console.print(
 #             continue
 #     else:
 #         break
-
 # console.print("Ok, I will work in [italic meganta]%s[/]" % folder)
 
 # # Do basic setup
