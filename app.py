@@ -1,4 +1,6 @@
 import os
+import re
+import subprocess
 import sys
 from os.path import join as pjoin
 from time import sleep
@@ -17,6 +19,12 @@ custom_style = Theme(
 )
 console.push_theme(custom_style)
 
+path_step = "\\"
+DEBUG_ = True
+CL_VERSION_REGEX = r"\d+\.\d+\.\d+"
+GIT_VERSION_REGEX = r"\d+\.\d+\.\d+.{1,10}"
+# Pretty much the same thing, so ... why not
+CMAKE_VERSION_REGEX = CL_VERSION_REGEX
 
 startup_message = (
     "[bold green]Welcome[/] to [bold purple][link=https://github.com/Advik-B/Aseprite-Compiler]Aseprite-Compiler[/][/].\n"
@@ -93,29 +101,110 @@ console.print(
 #         if not os.path.exists(locals()[locale]):
 #             os.makedirs(locals()[locale])
 
+
+def find_cl_version():
+    cl_version = subprocess.run(
+        cl[0], universal_newlines=True, capture_output=True)
+    cl_version = cl_version.stderr
+    cl_version = cl_version.split("\n")[0]
+    cl_version = re.findall(CL_VERSION_REGEX, cl_version)
+    if len(cl_version) <= 0:
+        return None
+    return cl_version[0]
+
+
+def find_git_version():
+    git_version = subprocess.run(
+        git[0] + " --version", universal_newlines=True, capture_output=True
+    )
+    git_version = git_version.stdout
+    # git version 2.37.0.windows.1
+    git_version = git_version.split("\n")[0]
+    git_version = re.findall(GIT_VERSION_REGEX, git_version)
+    if len(git_version) <= 0:
+        return None
+    return git_version[0]
+
+
+def find_cmake_version():
+    cmake_version = subprocess.run(
+        cmake[0] + " --version", universal_newlines=True, capture_output=True
+    )
+    cmake_version = cmake_version.stdout
+    # cmake version 3.12.0.win32-x86_64
+    cmake_version = cmake_version.split("\n")[0]
+    cmake_version = re.findall(CMAKE_VERSION_REGEX, cmake_version)
+    if len(cmake_version) <= 0:
+        return None
+    return cmake_version[0]
+
+
+def find_ninja_version():
+    ninja_version = subprocess.run(
+        ninja[0] + " --version", universal_newlines=True, capture_output=True
+    )
+    ninja_version = ninja_version.stdout
+    # 1.10.0
+    ninja_version = ninja_version.split("\n")[0]
+    # No need to check for the regex, because it's a simple string
+    return ninja_version[0]
+
+
+version_dict = {
+    "git": find_git_version,
+    "cl": find_cl_version,
+    "cmake": find_cmake_version,
+    "ninja": find_ninja_version,
+}
+
+deps = {}
 console.print("Ok, I'm [green]ready[/] to go.")
 with console.status("Checking for dependencies...") as status:
-    git = find_executable_in_path("git"), "Git"
-    cmake = find_executable_in_path("cmake"), "CMake"
-    ninja = find_executable_in_path("ninja"), "Ninja"
-    cl = find_executable_in_path("cl"), "Microsoft C++ Compiler"
-    deps = (git, cmake, ninja, cl)
-    for dep in deps:
+    git = find_executable_in_path("git"), "Git", "git"
+    cmake = find_executable_in_path("cmake"), "CMake", "cmake"
+    ninja = find_executable_in_path("ninja"), "Ninja", "ninja"
+    cl = find_executable_in_path("cl"), "Microsoft C++ Compiler", "cl"
+    deps_ = (git, cmake, ninja, cl)
+    for dep in deps_:
         if dep[0] is None:
-            console.log(f"{dep[1]} is missing.", style="bold red")
+            if DEBUG_:
+                console.log(DEBUG, f"[bold red]{dep[1]} is missing.[/]")
+            binary = dep[2]
+            deps[binary] = {
+                "path": None,
+                "name": dep[1],
+                "status": "[bold red]Missing[/]",
+                "version": r"¯\_(ツ)_/¯",
+            }
         else:
-            console.log(f"[bold green]Found[/] {dep[1]} at [italic yellow]{dep[0]}[/]")
+            if DEBUG_:
+                console.log(
+                    DEBUG,
+                    f"[bold green]Found[/] {dep[1]} at [italic yellow]{dep[0]}[/]",
+                )
+            binary = dep[0].split(path_step)
+            binary = binary[-1]
+            binary = binary.removesuffix(".exe")
+            deps[binary] = {
+                "path": dep[0],
+                "name": dep[1],
+                "status": "[bold green]Found[/]",
+                "version": version_dict[binary](),
+            }
 
-# Preapre the table for the dependencies
-deptable = Table(header_style="bold magenta", show_lines=True)
-deptable.add_column("Dependency")
-deptable.add_column("Version", style="bold white")
-deptable.add_column("Status", style="bold white")
+dependancy_table = Table("Dependancies")
+dependancy_table.add_column("Version")
+dependancy_table.add_column("Status")
+dependancy_table.add_column("Path")
 
-for dep in deps:
-    if dep[0] is None:
-        deptable.add_row(dep[1], "", "[red]Missing[/]")
-    else:
-        deptable.add_row(dep[1], "", "[green]Found[/]")
+for binary in deps:
+    dependancy_table.add_row(
 
-console.print(deptable)
+        deps[binary]["name"],
+        deps[binary]["version"],
+        deps[binary]["status"],
+        deps[binary]["path"],
+
+    )
+
+console.print(dependancy_table)
