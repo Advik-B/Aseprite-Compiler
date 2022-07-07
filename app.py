@@ -11,8 +11,16 @@ from rich.table import Table
 from rich.theme import Theme
 from rich.tree import Tree
 
-from util import (DEBUG, ERROR, INFO, WARNING, console, errors,
-                  find_executable_in_path, OS)
+from util import (
+    DEBUG,
+    ERROR,
+    INFO,
+    WARNING,
+    console,
+    errors,
+    find_executable_in_path,
+    OS,
+)
 
 custom_style = Theme(
     {"br": "white", "dep": "italic bold"},
@@ -34,7 +42,6 @@ startup_message = (
     "[bold purple]Aseprite-Compiler[/] is a CLI tool for compiling [bold blue link=https://www.aseprite.org]Aseprite[/] from its [italic cyan link=https://github.com/Aseprite/Aseprite]source code.[/]\n"
     "Here is come information cause I dont know what-else to put here :grinning_face_with_sweat:\n"
 )
-
 deps = Panel(
     "1. [italic bold red link=https://git-scm.com]Git[/] [bold white](Version Control System)[/]\n"
     "2. [italic bold blue link=https://github.com/Aseprite/Aseprite]Aseprite[/] [bold white](Source-Code)[/]\n"
@@ -107,7 +114,8 @@ console.print(
 
 def find_cl_version():
     cl_version = subprocess.run(
-        cl[0], universal_newlines=True, capture_output=True, shell=True)
+        cl[0], universal_newlines=True, capture_output=True, shell=True
+    )
     cl_version = cl_version.stderr
     cl_version = cl_version.split("\n")[0]
     cl_version = re.findall(CL_VERSION_REGEX, cl_version)
@@ -131,7 +139,10 @@ def find_git_version():
 
 def find_cmake_version():
     cmake_version = subprocess.run(
-        cmake[0] + " --version", universal_newlines=True, capture_output=True, shell=True
+        cmake[0] + " --version",
+        universal_newlines=True,
+        capture_output=True,
+        shell=True,
     )
     cmake_version = cmake_version.stdout
     # cmake version 3.12.0.win32-x86_64
@@ -144,7 +155,10 @@ def find_cmake_version():
 
 def find_ninja_version():
     ninja_version = subprocess.run(
-        ninja[0] + " --version", universal_newlines=True, capture_output=True, shell=True
+        ninja[0] + " --version",
+        universal_newlines=True,
+        capture_output=True,
+        shell=True,
     )
     ninja_version = ninja_version.stdout
     # 1.10.0
@@ -202,12 +216,10 @@ dependancy_table.add_column("Path")
 
 for binary in deps:
     dependancy_table.add_row(
-
         deps[binary]["name"],
         deps[binary]["version"],
         deps[binary]["status"],
         deps[binary]["path"],
-
     )
 
 console.print(dependancy_table)
