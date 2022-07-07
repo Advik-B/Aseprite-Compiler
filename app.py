@@ -12,17 +12,20 @@ from rich.theme import Theme
 from rich.tree import Tree
 
 from util import (DEBUG, ERROR, INFO, WARNING, console, errors,
-                  find_executable_in_path)
+                  find_executable_in_path, OS)
 
 custom_style = Theme(
     {"br": "white", "dep": "italic bold"},
 )
 console.push_theme(custom_style)
 
-path_step = "\\"
+if OS == "windows":
+    path_step = "\\"
+else:
+    path_step = "/"
 DEBUG_ = True
 CL_VERSION_REGEX = r"\d+\.\d+\.\d+"
-GIT_VERSION_REGEX = r"\d+\.\d+\.\d+.{1,10}"
+GIT_VERSION_REGEX = r"\d+\.\d+\.\d+.{0,10}"
 # Pretty much the same thing, so ... why not
 CMAKE_VERSION_REGEX = CL_VERSION_REGEX
 
@@ -104,7 +107,7 @@ console.print(
 
 def find_cl_version():
     cl_version = subprocess.run(
-        cl[0], universal_newlines=True, capture_output=True)
+        cl[0], universal_newlines=True, capture_output=True, shell=True)
     cl_version = cl_version.stderr
     cl_version = cl_version.split("\n")[0]
     cl_version = re.findall(CL_VERSION_REGEX, cl_version)
@@ -115,7 +118,7 @@ def find_cl_version():
 
 def find_git_version():
     git_version = subprocess.run(
-        git[0] + " --version", universal_newlines=True, capture_output=True
+        git[0] + " --version", universal_newlines=True, capture_output=True, shell=True
     )
     git_version = git_version.stdout
     # git version 2.37.0.windows.1
@@ -128,7 +131,7 @@ def find_git_version():
 
 def find_cmake_version():
     cmake_version = subprocess.run(
-        cmake[0] + " --version", universal_newlines=True, capture_output=True
+        cmake[0] + " --version", universal_newlines=True, capture_output=True, shell=True
     )
     cmake_version = cmake_version.stdout
     # cmake version 3.12.0.win32-x86_64
@@ -141,7 +144,7 @@ def find_cmake_version():
 
 def find_ninja_version():
     ninja_version = subprocess.run(
-        ninja[0] + " --version", universal_newlines=True, capture_output=True
+        ninja[0] + " --version", universal_newlines=True, capture_output=True, shell=True
     )
     ninja_version = ninja_version.stdout
     # 1.10.0
